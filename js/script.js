@@ -1,51 +1,51 @@
 //Searchbar Handler
 $(function(){
- var searchField=$('#query')
- var icon=$('#search-btn')
+var searchField=$('#query')
+var icon=$('#search-btn')
 
  //Focus Event Handler
- $(searchField).on('focus',function(){
+$(searchField).on('focus',function(){
   $(this).animate({
-   width:'100%'
+  width:'100%'
   },400);
   $(icon).animate({
-   right:'10px'
+  right:'10px'
   },400);
- });
+});
 
  //Blur Event Handler
- $(searchField).on('blur',function(){
-   if(searchField.val()==''){
+$(searchField).on('blur',function(){
+if(searchField.val()==''){
     $(searchField).animate({
-     width:'45%'
+    width:'45%'
     },400,function(){});
     $(icon).animate({
-     right:'360px'
+    right:'360px'
     },400,function(){});
-   }
- });
+  }
+});
 //stop the form from actually submitting
- $('#search-form').submit(function(e){
+  $('#search-form').submit(function(e){
   e.preventDefault();
- });
+});
 });
 
 function search(){
  //Clear Results
- $('#results').html('');
- $('#buttons').html('');
+  $('#results').html('');
+  $('#buttons').html('');
 
  //Get Form Input
- q=$('#query').val();
+q=$('#query').val();
 
  //Get Request on API
- $.get(
+$.get(
   "https://www.googleapis.com/youtube/v3/search",{
-   part:'snippet,id',
-   q:q,
-   type:'video',
-   key:'AIzaSyDxyaPDYnrPDF-SY1Et791JIGuJWBcLMUU'},
-   function(data){
+  part:'snippet,id',
+  q:q,
+  type:'video',
+  key:'AIzaSyDxyaPDYnrPDF-SY1Et791JIGuJWBcLMUU'},
+  function(data){
     var nextPageToken=data.nextPageToken;
     var prevPageToken=data.prevPageToken;
     //Log Data
@@ -53,30 +53,30 @@ function search(){
 
     $.each(data.items,function(i,item){
      //Get Output
-     var output=getOutput(item);
+    var output=getOutput(item);
 
      //Display Results
-     $('#results').append(output);
+      $('#results').append(output);
     });
 
     var buttons=getButtons(prevPageToken,nextPageToken);
 
     //Display Buttons
     $('#buttons').append(buttons);
-   }
- );
+  }
+);
 }
 
 //Build Output
 function getOutput(item){
- var videoId=item.id.videoId;
- var title=item.snippet.title;
- var description=item.snippet.description;
- var thumb=item.snippet.thumbnails.high.url;
- var channelTitle=item.snippet.channelTitle;
- var videoDate=item.snippet.publishedAt;
-//Build Output String
- var output='<li>'+
+  var videoId=item.id.videoId;
+  var title=item.snippet.title;
+  var description=item.snippet.description;
+  var thumb=item.snippet.thumbnails.high.url;
+  var channelTitle=item.snippet.channelTitle;
+  var videoDate=item.snippet.publishedAt;
+  //Build Output String
+  var output='<li>'+
 '<div class="list-left">'+
 '<img src="'+thumb+'">'+
 '</div>'+
@@ -92,23 +92,23 @@ return output;
 }
 
  //Next Page Functions
- function nextPage(){
+function nextPage(){
   var token=$('#next-button').data('token');
   var q=$('#next-button').data('query');
    //Clear Results
- $('#results').html('');
- $('#buttons').html(''); 
+  $('#results').html('');
+  $('#buttons').html(''); 
  //Get Form Input
- q=$('#query').val(); 
+  q=$('#query').val(); 
  //Get Request on API
- $.get(
+  $.get(
   "https://www.googleapis.com/youtube/v3/search",{
-   part:'snippet, id',
-   q:q,
-   pageToken:token,
-   type:'video',
-   key:'AIzaSyDxyaPDYnrPDF-SY1Et791JIGuJWBcLMUU'},
-   function(data){
+  part:'snippet, id',
+  q:q,
+  pageToken:token,
+  type:'video',
+  key:'AIzaSyDxyaPDYnrPDF-SY1Et791JIGuJWBcLMUU'},
+  function(data){
     var nextPageToken=data.nextPageToken;
     var prevPageToken=data.prevPageToken;
     //Log Data
@@ -116,19 +116,18 @@ return output;
 
     $.each(data.items,function(i,item){
      //Get Output
-     var output=getOutput(item);
+    var output=getOutput(item);
 
      //Display Results
-     $('#results').append(output);
+    $('#results').append(output);
     });
 
     var buttons=getButtons(prevPageToken,nextPageToken);
 
     //Display Buttons
     $('#buttons').append(buttons);
-   }
- );
- }
+}
+); }
 
 //Prev Page Functions
 function prevPage(){
